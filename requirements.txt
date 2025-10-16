@@ -1,0 +1,17 @@
+bleak==1.1.1
+numpy==2.2.6
+opencv-python==4.12.0.88
+PyAudio==0.2.14
+pynput==1.8.1
+pyobjc-core==11.1
+pyobjc-framework-ApplicationServices==11.1
+pyobjc-framework-Cocoa==11.1
+pyobjc-framework-CoreBluetooth==11.1
+pyobjc-framework-CoreText==11.1
+pyobjc-framework-libdispatch==11.1
+pyobjc-framework-Quartz==11.1
+six==1.17.0
+SpeechRecognition==3.14.3
+spherov2==0.12.1
+transforms3d==0.4.2
+typing_extensions==4.15.0

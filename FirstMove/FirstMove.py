@@ -6,6 +6,7 @@ from spherov2.sphero_edu import SpheroEduAPI
 from spherov2.types import Color
 from Sphero_Movement import SpheroMovement
 from Sphero_Programmed_Movement import SpheroProgrammedMovement
+from Sphero_Pattern import SpheroPattern
 
 class InteractiveSphero:
     def __init__(self):
@@ -14,65 +15,8 @@ class InteractiveSphero:
         self.is_running = True
         self.current_mode = "pattern"  
         
-        self.palette = {
-            "w": Color(255, 255, 255), 
-            "o": Color(255, 115, 27),  
-            "y": Color(255, 255, 0),   
-            "b": Color(150, 100, 60), 
-            "r": Color(255, 0, 0),        
-            "0": None                    
-        }
-        
-        # Ishoct
-        self.pattern = [
-            ["0","w","b","b","b","b","w","0"],
-            ["w","o","o","o","o","o","o","w"],
-            ["o","o","o","o","o","o","o","o"],
-            ["o","o","y","o","o","y","o","o"],
-            ["o","o","y","o","o","y","o","o"],
-            ["o","o","o","b","b","o","o","o"],
-            ["0","o","0","o","o","0","o","0"],
-            ["o","o","0","o","o","0","o","o"]
-        ]
-        
-        # angryish
-        self.pickup_pattern = [
-            ["0","w","b","b","b","b","w","0"],
-            ["w","o","o","o","r","o","r","w"],
-            ["o","o","o","r","r","o","r","r"],
-            ["o","o","o","o","o","o","o","o"],
-            ["o","o","o","r","r","o","r","r"],
-            ["o","o","o","o","r","o","r","o"],
-            ["0","o","0","o","o","0","o","0"],
-            ["o","o","0","o","o","0","o","o"]
-        ]
-        
-        # wave animation
-        self.wave_frames = [
-            [
-                [0,0,0,0,0,0,0,0],
-                [0,0,0,0,0,0,1,1],
-                [0,0,0,0,0,0,1,0],
-                [0,0,0,0,1,1,1,0],
-                [0,0,0,0,1,0,0,0],
-                [0,0,1,1,1,0,0,0],
-                [0,0,1,0,0,0,0,0],
-                [1,1,1,0,0,0,0,0]
-            ],
-            [
-                [0,0,0,0,0,0,1,0],
-                [0,0,0,0,1,1,1,0],
-                [0,0,0,0,1,0,0,0],
-                [0,0,1,1,1,0,0,0],
-                [0,0,1,0,0,0,0,0],
-                [1,1,1,0,0,0,0,0],
-                [1,0,0,0,0,0,0,0],
-                [1,0,0,0,0,0,0,0]
-            ]
-        ]
-
-        self.color_matrix = [[self.palette[cell] for cell in row] for row in self.pattern]
-        self.pickup_color_matrix = [[self.palette[cell] for cell in row] for row in self.pickup_pattern]
+        # 图案数据管理
+        self.patterns = SpheroPattern()
         
         self.movement_controller = None
         self.programmed_movement = None
@@ -111,31 +55,17 @@ class InteractiveSphero:
                 pass
     
     def display_pattern(self):
-        """Ishmael"""
+        """显示Ishmael图案"""
         try:
-            self.api.clear_matrix()
-            
-            for row in range(len(self.pattern)):
-                for col in range(len(self.pattern[row])):
-                    color = self.color_matrix[row][col]
-                    if color is not None:
-                        self.api.set_matrix_pixel(col, row, color)
-            
+            self.patterns.render_matrix(self.api, self.patterns.color_matrix_ishmael)
             print("Ishmael")
         except Exception as e:
             print(f"fail: {e}")
     
     def display_pickup_pattern(self):
-        """angry ishmael"""
+        """显示愤怒Ishmael图案"""
         try:
-            self.api.clear_matrix()
-            
-            for row in range(len(self.pickup_pattern)):
-                for col in range(len(self.pickup_pattern[row])):
-                    color = self.pickup_color_matrix[row][col]
-                    if color is not None:
-                        self.api.set_matrix_pixel(col, row, color)
-            
+            self.patterns.render_matrix(self.api, self.patterns.color_matrix_angry)
             print("angry ishmael")
         except Exception as e:
             print(f"fail: {e}")
@@ -148,7 +78,7 @@ class InteractiveSphero:
                 if self.current_mode != "wave": 
                     break
                     
-                for frame in self.wave_frames:
+                for frame in self.patterns.wave_frames:
                     if self.current_mode != "wave":
                         break
                         
